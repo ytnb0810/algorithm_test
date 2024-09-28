@@ -1,0 +1,60 @@
+import java.util.Arrays;
+
+public class IterativeMergeSort {
+
+    public static void main(String[] args) {
+        int[] array = {3, 1, 2, 3, 5, 4, 2, 27, 6, 27};
+        int[] sortedArray = mergeSort(array);
+        System.out.println(Arrays.toString(sortedArray));
+    }
+
+    public static int[] mergeSort(int[] array) {
+        int n = array.length;
+        // 创建一个辅助数组
+        int[] temp = new int[n];
+
+        // 每次合并的子数组大小
+        for (int size = 1; size < n; size *= 2) {
+            for (int leftStart = 0; leftStart < n; leftStart += 2 * size) {
+                // 确定左右子数组的起始和结束索引
+                int mid = Math.min(leftStart + size - 1, n - 1);
+                int rightEnd = Math.min(leftStart + 2 * size - 1, n - 1);
+
+                // 合并两个子数组
+                merge(array, temp, leftStart, mid, rightEnd);
+            }
+        }
+
+        return array;
+    }
+
+    public static void merge(int[] array, int[] temp, int leftStart, int mid, int rightEnd) {
+        int left = leftStart;
+        int right = mid + 1;
+        int index = leftStart;
+
+        // 合并两个子数组
+        while (left <= mid && right <= rightEnd) {
+            if (array[left] <= array[right]) {
+                temp[index++] = array[left++];
+            } else {
+                temp[index++] = array[right++];
+            }
+        }
+
+        // 复制左侧剩余元素
+        while (left <= mid) {
+            temp[index++] = array[left++];
+        }
+
+        // 复制右侧剩余元素
+        while (right <= rightEnd) {
+            temp[index++] = array[right++];
+        }
+
+        // 将排序结果复制回原数组
+        for (int i = leftStart; i <= rightEnd; i++) {
+            array[i] = temp[i];
+        }
+    }
+}
